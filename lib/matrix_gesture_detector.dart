@@ -61,7 +61,7 @@ class MatrixGestureDetector extends StatefulWidget {
 //   final Function(DragEndDetails details) onPanEnd;
 
   // final Function(ScaleEndDetails details) onScaleEnd;
-  final Function onScaleEnd;
+  final Function(Map data) onScaleEnd;
 
   const MatrixGestureDetector({
     Key? key,
@@ -123,7 +123,7 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
       onScaleStart: onScaleStart,
       onScaleUpdate: onScaleUpdate,
 //       onPanEnd: widget.onPanEnd,
-      onScaleEnd: widget.onScaleEnd,
+      onScaleEnd: onScaleEnd,
       child: child,
     );
   }
@@ -154,14 +154,25 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
   double testScale = 1.0;
   double testRotation = 0.0;
 
-  Map onScaleEnd() {
-    return {
+  void onScaleEnd(ScaleEndDetails details) {
+    Map a = {
       'dx': testOffset.dx,
       'dy': testOffset.dy,
       'scale': testScale,
       'rocation': testRotation,
     };
+    widget.onScaleEnd(a)
   }
+
+  // Map asd() {
+  //   widget.onScaleEnd()
+  //   return {
+  //     'dx': testOffset.dx,
+  //     'dy': testOffset.dy,
+  //     'scale': testScale,
+  //     'rocation': testRotation,
+  //   };
+  // }
 
   void onScaleUpdate(ScaleUpdateDetails details) {
     translationDeltaMatrix = Matrix4.identity();
