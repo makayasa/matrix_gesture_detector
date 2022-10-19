@@ -62,8 +62,9 @@ class MatrixGestureDetector extends StatefulWidget {
   /// aligned relative to the size of this widget.
   final Alignment? focalPointAlignment;
     
-  final Function(DragEndDetails details) onPanEnd;
-    
+//   final Function(DragEndDetails details) onPanEnd;
+  
+  final Function(ScaleEndDetails details) onScaleEnd;
 
   const MatrixGestureDetector({
     Key? key,
@@ -75,7 +76,8 @@ class MatrixGestureDetector extends StatefulWidget {
     this.clipChild = true,
     this.focalPointAlignment,
     this.behavior = HitTestBehavior.deferToChild,
-    required this.onPanEnd,
+    required this.onScaleEnd;
+//     required this.onPanEnd,
   })  : super(key: key);
 
   @override
@@ -125,7 +127,8 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
       behavior: widget.behavior,
       onScaleStart: onScaleStart,
       onScaleUpdate: onScaleUpdate,
-      onPanEnd: widget.onPanEnd,
+//       onPanEnd: widget.onPanEnd,
+      onScaleEnd: widget.onScaleEnd,
       child: child,
     );
   }
