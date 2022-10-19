@@ -161,7 +161,7 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
       'scale': testScale,
       'rocation': testRotation,
     };
-    widget.onScaleEnd(a)
+    widget.onScaleEnd(a);
   }
 
   // Map asd() {
