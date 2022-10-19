@@ -141,6 +141,28 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
     onUpdate: (oldVal, newVal) => newVal - oldVal,
   );
 
+  void logKey([key, content]) {
+    String finalLog = '';
+    dynamic tempContent = content ?? key;
+    if (tempContent is Map || tempContent is List) {
+      try {
+        finalLog = json.encode(tempContent);
+      } catch (e) {
+        finalLog = tempContent.toString();
+      }
+    } else if (tempContent is String) {
+      finalLog = tempContent;
+    } else {
+      finalLog = tempContent.toString();
+    }
+
+    if (content != null) {
+      log('$key => $finalLog');
+    } else {
+      log(finalLog);
+    }
+  }
+
   void onScaleStart(ScaleStartDetails details) {
     translationUpdater.value = details.focalPoint;
     scaleUpdater.value = 1.0;
@@ -182,6 +204,8 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
     // handle matrix translating
     if (widget.shouldTranslate) {
       Offset translationDelta = translationUpdater.update(details.focalPoint);
+      logKey('dx', translationDelta.dx);
+      logKey('dy', translationDelta.dy);
       testOffset = translationDelta;
       translationDeltaMatrix = _translate(translationDelta);
       matrix = translationDeltaMatrix * matrix;
@@ -193,6 +217,7 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
     // handle matrix scaling
     if (widget.shouldScale && details.scale != 1.0) {
       double scaleDelta = scaleUpdater.update(details.scale);
+      logKey('scaleDelta', scaleDelta);
       testScale = scaleDelta;
       scaleDeltaMatrix = _scale(scaleDelta, focalPoint);
       matrix = scaleDeltaMatrix * matrix;
@@ -201,6 +226,7 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
     // handle matrix rotating
     if (widget.shouldRotate && details.rotation != 0.0) {
       double rotationDelta = rotationUpdater.update(details.rotation);
+      logKey('rotationDelta',rotationDelta);
       testRotation = rotationDelta;
       rotationDeltaMatrix = _rotate(rotationDelta, focalPoint);
       matrix = rotationDeltaMatrix * matrix;
