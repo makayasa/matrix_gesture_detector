@@ -1,6 +1,7 @@
 library matrix_gesture_detector;
 
 import 'dart:math';
+import 'dart:developer' as dev;
 
 import 'package:flutter/widgets.dart';
 import 'package:vector_math/vector_math_64.dart';
@@ -157,9 +158,9 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
     }
 
     if (content != null) {
-      log('$key => $finalLog');
+      dev.log('$key => $finalLog');
     } else {
-      log(finalLog);
+      dev.log(finalLog);
     }
   }
 
