@@ -212,7 +212,7 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
     rotationDeltaMatrix = Matrix4.identity();
 
     if (widget.inputMatrix != null) {
-      Matrix4 temp = Matrix4.fromFloat64List(widget.inputMatrix);
+      Matrix4 temp = Matrix4.fromFloat64List(widget.inputMatrix)
       // handle matrix translating
       if (widget.shouldTranslate) {
         Offset translationDelta = translationUpdater.update(details.focalPoint);
@@ -247,7 +247,7 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
         Offset translationDelta = translationUpdater.update(details.focalPoint);
         testOffset = translationDelta;
         translationDeltaMatrix = _translate(translationDelta);
-        matrix = translationDeltaMatrix * widget.inputMatrix;
+        matrix = translationDeltaMatrix * matrix;
       }
 
       final focalPointAlignment = widget.focalPointAlignment;
