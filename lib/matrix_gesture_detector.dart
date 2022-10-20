@@ -220,6 +220,7 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
       // handle matrix translating
       if (widget.shouldTranslate) {
         Offset translationDelta = translationUpdater.update(details.focalPoint);
+        logKey('after details.focalPoint', details.focalPoint);
         testOffset = translationDelta;
         translationDeltaMatrix = _translate(translationDelta);
         temp = translationDeltaMatrix * temp;
