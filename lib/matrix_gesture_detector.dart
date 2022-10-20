@@ -195,7 +195,7 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
   double testRotation = 0.0;
 
   void onScaleEnd(ScaleEndDetails details) {
-    logKey('masuk ga sih kalau habis undo');
+    // logKey('masuk ga sih kalau habis undo');
     Map a = {
       'dx': testOffset.dx,
       'dy': testOffset.dy,
@@ -216,7 +216,7 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
   // }
 
   void onScaleUpdate(ScaleUpdateDetails details) {
-    logKey('masuk ga sih kalau habis undo');
+    // logKey('masuk ga sih kalau habis undo');
     translationDeltaMatrix = Matrix4.identity();
     scaleDeltaMatrix = Matrix4.identity();
     rotationDeltaMatrix = Matrix4.identity();
@@ -227,16 +227,16 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
       Matrix4 tempTranslation = widget.inputTranslationMatrix!;
       Matrix4 tempScale = widget.inputScaleMatrix!;
       Matrix4 tempRotaion = widget.inputRotaionMatrix!;
-      logKey('matrix with input', temp);
+      // logKey('matrix with input', temp);
       // Matrix4 temp = Matrix4.fromFloat64List(widget.inputMatrix);
       // handle matrix translating
       if (widget.shouldTranslate) {
         Offset translationDelta = translationUpdater.update(details.focalPoint);
-        logKey('after details.focalPoint', details.focalPoint);
+        // logKey('after details.focalPoint', details.focalPoint);
         testOffset = translationDelta;
         tempTranslation = _translate(translationDelta);
         temp = tempTranslation * temp;
-        logKey('after translation with input', temp);
+        // logKey('after translation with input', temp);
       }
 
       final focalPointAlignment = widget.focalPointAlignment;
@@ -260,7 +260,7 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
 
       widget.onMatrixUpdate(temp, tempTranslation, tempScale, tempRotaion);
     } else {
-      logKey('matrix without input', matrix);
+      // logKey('matrix without input', matrix);
 
       // handle matrix translating
       if (widget.shouldTranslate) {
