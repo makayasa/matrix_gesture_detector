@@ -65,7 +65,8 @@ class MatrixGestureDetector extends StatefulWidget {
   // final Function(ScaleEndDetails details) onScaleEnd;
   final Function(Map data) onScaleEnd;
 
-  final Matrix4? inputMatrix;
+  // final Matrix4? inputMatrix;
+  final Float64List? inputM`atrix;
 
   const MatrixGestureDetector({
     Key? key,
@@ -211,12 +212,13 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
     rotationDeltaMatrix = Matrix4.identity();
 
     if (widget.inputMatrix != null) {
+      Matrix4 temp = Matrix4.fromFloat64List(widget.inputMatrix)
       // handle matrix translating
       if (widget.shouldTranslate) {
         Offset translationDelta = translationUpdater.update(details.focalPoint);
         testOffset = translationDelta;
         translationDeltaMatrix = _translate(translationDelta);
-        widget.inputMatrix = translationDeltaMatrix * widget.inputMatrix;
+        temp = translationDeltaMatrix * temp;
       }
 
       final focalPointAlignment = widget.focalPointAlignment;
@@ -227,7 +229,7 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
         double scaleDelta = scaleUpdater.update(details.scale);
         testScale = scaleDelta;
         scaleDeltaMatrix = _scale(scaleDelta, focalPoint);
-        widget.inputMatrix = scaleDeltaMatrix * widget.inputMatrix;
+        temp = scaleDeltaMatrix * temp;
       }
 
       // handle matrix rotating
@@ -235,17 +237,17 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
         double rotationDelta = rotationUpdater.update(details.rotation);
         testRotation = rotationDelta;
         rotationDeltaMatrix = _rotate(rotationDelta, focalPoint);
-        widget.inputMatrix = rotationDeltaMatrix * widget.inputMatrix;
+        temp = rotationDeltaMatrix * temp;
       }
 
-      widget.onMatrixUpdate(matrix, translationDeltaMatrix, scaleDeltaMatrix, rotationDeltaMatrix);
+      widget.onMatrixUpdate(temp, translationDeltaMatrix, scaleDeltaMatrix, rotationDeltaMatrix);
     } else {
       // handle matrix translating
       if (widget.shouldTranslate) {
         Offset translationDelta = translationUpdater.update(details.focalPoint);
         testOffset = translationDelta;
         translationDeltaMatrix = _translate(translationDelta);
-        widget.inputMatrix = translationDeltaMatrix * widget.inputMatrix;
+        matrix = translationDeltaMatrix * widget.inputMatrix;
       }
 
       final focalPointAlignment = widget.focalPointAlignment;
