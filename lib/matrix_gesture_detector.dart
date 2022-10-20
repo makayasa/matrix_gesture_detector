@@ -215,6 +215,7 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
 
     if (widget.inputMatrix != null) {
       Matrix4 temp = widget.inputMatrix!;
+      logKey('matrix with input', temp);
       // Matrix4 temp = Matrix4.fromFloat64List(widget.inputMatrix);
       // handle matrix translating
       if (widget.shouldTranslate) {
@@ -245,6 +246,8 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
 
       widget.onMatrixUpdate(temp, translationDeltaMatrix, scaleDeltaMatrix, rotationDeltaMatrix);
     } else {
+      logKey('matrix without input', matrix);
+
       // handle matrix translating
       if (widget.shouldTranslate) {
         Offset translationDelta = translationUpdater.update(details.focalPoint);
