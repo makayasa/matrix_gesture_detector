@@ -219,7 +219,8 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
     scaleDeltaMatrix = Matrix4.identity();
     rotationDeltaMatrix = Matrix4.identity();
 
-    if (widget.inputMatrix != null && widget.inputTranslationMatrix != null && widget.inputScaleMatrix != null && widget.inputRotaionMatrix != null) {
+    // if (widget.inputMatrix != null && widget.inputTranslationMatrix != null && widget.inputScaleMatrix != null && widget.inputRotaionMatrix != null) {
+    if (false) {
       Matrix4 temp = widget.inputMatrix!;
       Matrix4 tempTranslation = widget.inputTranslationMatrix!;
       Matrix4 tempScale = widget.inputScaleMatrix!;
