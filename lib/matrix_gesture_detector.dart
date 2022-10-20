@@ -255,7 +255,7 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
         temp = tempRotaion * temp;
       }
 
-      widget.onMatrixUpdate(temp, translationDeltaMatrix, scaleDeltaMatrix, rotationDeltaMatrix);
+      widget.onMatrixUpdate(temp, tempTranslation, tempScale, tempRotaion);
     } else {
       logKey('matrix without input', matrix);
 
