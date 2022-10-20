@@ -195,6 +195,7 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
   double testRotation = 0.0;
 
   void onScaleEnd(ScaleEndDetails details) {
+    logKey('masuk ga sih kalau habis undo');
     Map a = {
       'dx': testOffset.dx,
       'dy': testOffset.dy,
