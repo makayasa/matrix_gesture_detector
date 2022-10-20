@@ -65,6 +65,8 @@ class MatrixGestureDetector extends StatefulWidget {
   // final Function(ScaleEndDetails details) onScaleEnd;
   final Function(Map data) onScaleEnd;
 
+  final Matrix4? inputMatrix;
+
   const MatrixGestureDetector({
     Key? key,
     required this.onMatrixUpdate,
@@ -75,6 +77,7 @@ class MatrixGestureDetector extends StatefulWidget {
     this.clipChild = true,
     this.focalPointAlignment,
     this.behavior = HitTestBehavior.deferToChild,
+    this.inputMatrix,
     required this.onScaleEnd,
 //     required this.onPanEnd,
   }) : super(key: key);
@@ -172,6 +175,10 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
     testOffset = Offset(0.0, 0.0);
     testScale = 1.0;
     testRotation = 0.0;
+
+    // if(widget.inputMatrix !=null){
+    //   onUndo(details)
+    // }
   }
 
   Offset testOffset = Offset(0.0, 0.0);
@@ -203,14 +210,77 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
     scaleDeltaMatrix = Matrix4.identity();
     rotationDeltaMatrix = Matrix4.identity();
 
-    // handle matrix translating
+    if (widget.inputMatrix != null) {
+      // handle matrix translating
+      if (widget.shouldTranslate) {
+        Offset translationDelta = translationUpdater.update(details.focalPoint);
+        testOffset = translationDelta;
+        translationDeltaMatrix = _translate(translationDelta);
+        widget.inputMatrix = translationDeltaMatrix * widget.inputMatrix;
+      }
+
+      final focalPointAlignment = widget.focalPointAlignment;
+      final focalPoint = focalPointAlignment == null ? details.localFocalPoint : focalPointAlignment.alongSize(context.size!);
+
+      // handle matrix scaling
+      if (widget.shouldScale && details.scale != 1.0) {
+        double scaleDelta = scaleUpdater.update(details.scale);
+        testScale = scaleDelta;
+        scaleDeltaMatrix = _scale(scaleDelta, focalPoint);
+        widget.inputMatrix = scaleDeltaMatrix * widget.inputMatrix;
+      }
+
+      // handle matrix rotating
+      if (widget.shouldRotate && details.rotation != 0.0) {
+        double rotationDelta = rotationUpdater.update(details.rotation);
+        testRotation = rotationDelta;
+        rotationDeltaMatrix = _rotate(rotationDelta, focalPoint);
+        widget.inputMatrix = rotationDeltaMatrix * widget.inputMatrix;
+      }
+
+      widget.onMatrixUpdate(matrix, translationDeltaMatrix, scaleDeltaMatrix, rotationDeltaMatrix);
+    } else {
+      // handle matrix translating
+      if (widget.shouldTranslate) {
+        Offset translationDelta = translationUpdater.update(details.focalPoint);
+        testOffset = translationDelta;
+        translationDeltaMatrix = _translate(translationDelta);
+        widget.inputMatrix = translationDeltaMatrix * widget.inputMatrix;
+      }
+
+      final focalPointAlignment = widget.focalPointAlignment;
+      final focalPoint = focalPointAlignment == null ? details.localFocalPoint : focalPointAlignment.alongSize(context.size!);
+
+      // handle matrix scaling
+      if (widget.shouldScale && details.scale != 1.0) {
+        double scaleDelta = scaleUpdater.update(details.scale);
+        testScale = scaleDelta;
+        scaleDeltaMatrix = _scale(scaleDelta, focalPoint);
+        matrix = scaleDeltaMatrix * matrix;
+      }
+
+      // handle matrix rotating
+      if (widget.shouldRotate && details.rotation != 0.0) {
+        double rotationDelta = rotationUpdater.update(details.rotation);
+        testRotation = rotationDelta;
+        rotationDeltaMatrix = _rotate(rotationDelta, focalPoint);
+        matrix = rotationDeltaMatrix * matrix;
+      }
+
+      widget.onMatrixUpdate(matrix, translationDeltaMatrix, scaleDeltaMatrix, rotationDeltaMatrix);
+    }
+  }
+
+  void onUndo(ScaleUpdateDetails details) {
+    translationDeltaMatrix = Matrix4.identity();
+    scaleDeltaMatrix = Matrix4.identity();
+    rotationDeltaMatrix = Matrix4.identity();
+
     if (widget.shouldTranslate) {
       Offset translationDelta = translationUpdater.update(details.focalPoint);
-      // logKey('dx', translationDelta.dx);
-      // logKey('dy', translationDelta.dy);
       testOffset = translationDelta;
       translationDeltaMatrix = _translate(translationDelta);
-      matrix = translationDeltaMatrix * matrix;
+      widget.inputMatrix = translationDeltaMatrix * widget.inputMatrix;
     }
 
     final focalPointAlignment = widget.focalPointAlignment;
@@ -219,22 +289,20 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
     // handle matrix scaling
     if (widget.shouldScale && details.scale != 1.0) {
       double scaleDelta = scaleUpdater.update(details.scale);
-      // logKey('scaleDelta', scaleDelta);
       testScale = scaleDelta;
       scaleDeltaMatrix = _scale(scaleDelta, focalPoint);
-      matrix = scaleDeltaMatrix * matrix;
+      widget.inputMatrix = scaleDeltaMatrix * widget.inputMatrix;
     }
 
     // handle matrix rotating
     if (widget.shouldRotate && details.rotation != 0.0) {
       double rotationDelta = rotationUpdater.update(details.rotation);
-      // logKey('rotationDelta',rotationDelta);
       testRotation = rotationDelta;
       rotationDeltaMatrix = _rotate(rotationDelta, focalPoint);
-      matrix = rotationDeltaMatrix * matrix;
+      widget.inputMatrix = rotationDeltaMatrix * widget.inputMatrix;
     }
 
-    widget.onMatrixUpdate(matrix, translationDeltaMatrix, scaleDeltaMatrix, rotationDeltaMatrix);
+    widget.onMatrixUpdate(widget.inputMatrix, translationDeltaMatrix, scaleDeltaMatrix, rotationDeltaMatrix);
   }
 
   Matrix4 _translate(Offset translation) {
