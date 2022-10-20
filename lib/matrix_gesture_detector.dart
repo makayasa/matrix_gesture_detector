@@ -223,6 +223,7 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
         testOffset = translationDelta;
         translationDeltaMatrix = _translate(translationDelta);
         temp = translationDeltaMatrix * temp;
+        logKey('after translation with input', temp);
       }
 
       final focalPointAlignment = widget.focalPointAlignment;
