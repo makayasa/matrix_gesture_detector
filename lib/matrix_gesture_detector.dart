@@ -67,6 +67,9 @@ class MatrixGestureDetector extends StatefulWidget {
   final Function(Map data) onScaleEnd;
 
   final Matrix4? inputMatrix;
+  final Matrix4? inputTranslationMatrix;
+  final Matrix4? inputScaleMatrix;
+  final Matrix4? inputRotaionMatrix;
   // final Float64List? inputMatrix;
 
   const MatrixGestureDetector({
@@ -80,6 +83,9 @@ class MatrixGestureDetector extends StatefulWidget {
     this.focalPointAlignment,
     this.behavior = HitTestBehavior.deferToChild,
     this.inputMatrix,
+    this.inputTranslationMatrix,
+    this.inputScaleMatrix,
+    this.inputRotaionMatrix,
     required this.onScaleEnd,
 //     required this.onPanEnd,
   }) : super(key: key);
@@ -213,8 +219,11 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
     scaleDeltaMatrix = Matrix4.identity();
     rotationDeltaMatrix = Matrix4.identity();
 
-    if (widget.inputMatrix != null) {
+    if (widget.inputMatrix != null && widget.inputTranslationMatrix != null widget.inputScaleMatrix != null && widget.inputRotaionMatrix) {
       Matrix4 temp = widget.inputMatrix!;
+      Matrix4 tempTranslation = widget.inputTranslationMatrix!;
+      Matrix4 tempScale = widget.inputScaleMatrix!;
+      Matrix4 tempRotaion = widget.inputRotaionMatrix!;
       logKey('matrix with input', temp);
       // Matrix4 temp = Matrix4.fromFloat64List(widget.inputMatrix);
       // handle matrix translating
@@ -222,8 +231,8 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
         Offset translationDelta = translationUpdater.update(details.focalPoint);
         logKey('after details.focalPoint', details.focalPoint);
         testOffset = translationDelta;
-        translationDeltaMatrix = _translate(translationDelta);
-        temp = translationDeltaMatrix * temp;
+        tempTranslation = _translate(translationDelta);
+        temp = tempTranslation * temp;
         logKey('after translation with input', temp);
       }
 
@@ -234,16 +243,16 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
       if (widget.shouldScale && details.scale != 1.0) {
         double scaleDelta = scaleUpdater.update(details.scale);
         testScale = scaleDelta;
-        scaleDeltaMatrix = _scale(scaleDelta, focalPoint);
-        temp = scaleDeltaMatrix * temp;
+        tempScale = _scale(scaleDelta, focalPoint);
+        temp = tempScale * temp;
       }
 
       // handle matrix rotating
       if (widget.shouldRotate && details.rotation != 0.0) {
         double rotationDelta = rotationUpdater.update(details.rotation);
         testRotation = rotationDelta;
-        rotationDeltaMatrix = _rotate(rotationDelta, focalPoint);
-        temp = rotationDeltaMatrix * temp;
+        tempRotaion = _rotate(rotationDelta, focalPoint);
+        temp = tempRotaion * temp;
       }
 
       widget.onMatrixUpdate(temp, translationDeltaMatrix, scaleDeltaMatrix, rotationDeltaMatrix);
