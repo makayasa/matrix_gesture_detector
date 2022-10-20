@@ -3,6 +3,7 @@ library matrix_gesture_detector;
 import 'dart:math';
 import 'dart:developer' as dev;
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/widgets.dart';
 import 'package:vector_math/vector_math_64.dart';
