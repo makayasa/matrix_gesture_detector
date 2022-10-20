@@ -3,7 +3,6 @@ library matrix_gesture_detector;
 import 'dart:math';
 import 'dart:developer' as dev;
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:flutter/widgets.dart';
 import 'package:vector_math/vector_math_64.dart';
@@ -213,7 +212,7 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
     rotationDeltaMatrix = Matrix4.identity();
 
     if (widget.inputMatrix != null) {
-      Matrix4 temp = Matrix4.fromFloat64List(widget.inputMatrix)
+      Matrix4 temp = Matrix4.fromFloat64List(widget.inputMatrix);
       // handle matrix translating
       if (widget.shouldTranslate) {
         Offset translationDelta = translationUpdater.update(details.focalPoint);
