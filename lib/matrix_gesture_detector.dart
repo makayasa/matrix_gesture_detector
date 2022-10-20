@@ -136,6 +136,7 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
       behavior: widget.behavior,
       onScaleStart: onScaleStart,
       onScaleUpdate: onScaleUpdate,
+      onPanUpdate: (details) {},
 //       onPanEnd: widget.onPanEnd,
       onScaleEnd: onScaleEnd,
       child: child,
