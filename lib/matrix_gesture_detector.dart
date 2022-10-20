@@ -215,6 +215,7 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
   // }
 
   void onScaleUpdate(ScaleUpdateDetails details) {
+    logKey('masuk ga sih kalau habis undo')
     translationDeltaMatrix = Matrix4.identity();
     scaleDeltaMatrix = Matrix4.identity();
     rotationDeltaMatrix = Matrix4.identity();
