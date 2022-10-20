@@ -66,7 +66,7 @@ class MatrixGestureDetector extends StatefulWidget {
   final Function(Map data) onScaleEnd;
 
   // final Matrix4? inputMatrix;
-  final Float64List? inputM`atrix;
+  final Float64List? inputMatrix;
 
   const MatrixGestureDetector({
     Key? key,
