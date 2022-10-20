@@ -65,6 +65,7 @@ class MatrixGestureDetector extends StatefulWidget {
 
   // final Function(ScaleEndDetails details) onScaleEnd;
   final Function(Map data) onScaleEnd;
+  final VoidCallback onScaleStart;
 
   final Matrix4? inputMatrix;
   final Matrix4? inputTranslationMatrix;
@@ -87,6 +88,7 @@ class MatrixGestureDetector extends StatefulWidget {
     this.inputScaleMatrix,
     this.inputRotaionMatrix,
     required this.onScaleEnd,
+    required this.onScaleStart,
 //     required this.onPanEnd,
   }) : super(key: key);
 
@@ -136,7 +138,7 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
       behavior: widget.behavior,
       onScaleStart: onScaleStart,
       onScaleUpdate: onScaleUpdate,
-      onPanUpdate: (details) {},
+      scale
 //       onPanEnd: widget.onPanEnd,
       onScaleEnd: onScaleEnd,
       child: child,
@@ -179,6 +181,7 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
   }
 
   void onScaleStart(ScaleStartDetails details) {
+    widget.onScaleStart();
     translationUpdater.value = details.focalPoint;
     scaleUpdater.value = 1.0;
     rotationUpdater.value = 0.0;
@@ -218,6 +221,7 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
 
   void onScaleUpdate(ScaleUpdateDetails details) {
     // logKey('masuk ga sih kalau habis undo');
+    widget.onScaleStart();
     translationDeltaMatrix = Matrix4.identity();
     scaleDeltaMatrix = Matrix4.identity();
     rotationDeltaMatrix = Matrix4.identity();
